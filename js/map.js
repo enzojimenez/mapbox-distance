@@ -1,4 +1,5 @@
 var mM = ((settings) => {
+    window.MAP = {};
     var endpoint = settings.endpoint || '',
         token = settings.token || '',
         search_profile = settings.search_profile || '',
@@ -113,10 +114,10 @@ var mM = ((settings) => {
                 if (from instanceof mapboxgl.Marker && to instanceof mapboxgl.Marker) {
                     $.get(encodeURI(endpoint + '/directions/v5/mapbox/' + route_profile + '/' + from._lngLat.lng + ',' + from._lngLat.lat + ';' + to._lngLat.lng + ',' + to._lngLat.lat + '?geometries=geojson&access_token=' + token)).done((response) => {
                         let routeGeoJSON = turf.featureCollection([turf.feature(response.routes[0].geometry)]);
-                        distance = (response.routes[0].distance / 1000);
-                        duration = (response.routes[0].duration / 60);
-                        $('#distance').text(toNumber(distance) + ' Km');
-                        $('#duration').text(toNumber(duration) + ' Min.');
+                        window.MAP.distance = (response.routes[0].distance / 1000);
+                        window.MAP.duration = (response.routes[0].duration / 60);
+                        $('#distance').text(toNumber(window.MAP.distance) + ' Km');
+                        $('#duration').text(toNumber(window.MAP.duration) + ' Min.');
                         let coordinates = response.routes[0].geometry.coordinates;
                         let bounds = coordinates.reduce((bounds, coord) => {
                             return bounds.extend(coord);
